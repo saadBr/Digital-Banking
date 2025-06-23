@@ -18,9 +18,10 @@ public class BankAccount {
     private String id;
     private double balance;
     private Date dateCreated;
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
     @ManyToOne
     private Customer customer;
-    @OneToMany(mappedBy = "bankAccount")
+    @OneToMany(mappedBy = "bankAccount",fetch = FetchType.LAZY)
     private List<AccountOperation> accountOperations;
 }

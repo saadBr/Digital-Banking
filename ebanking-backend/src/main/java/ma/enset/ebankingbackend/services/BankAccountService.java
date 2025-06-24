@@ -12,7 +12,7 @@ import ma.enset.ebankingbackend.exceptions.CustomerNotFoundException;
 import java.util.List;
 
 public interface BankAccountService {
-    Customer saveCustomer(Customer customer);
+    CustomerDTO saveCustomer(CustomerDTO customer);
     CurrentAccount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundException;
     SavingAccount saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundException;
     List<CustomerDTO> getCustomers();
@@ -24,4 +24,8 @@ public interface BankAccountService {
     List<BankAccount> getAllBankAccounts();
 
     CustomerDTO getCustomerById(long id) throws CustomerNotFoundException;
+
+    CustomerDTO updateCustomer(CustomerDTO customerDTO);
+
+    void deleteCustomer(long id) throws CustomerNotFoundException;
 }

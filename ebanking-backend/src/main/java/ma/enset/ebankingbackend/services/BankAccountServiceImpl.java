@@ -2,12 +2,14 @@ package ma.enset.ebankingbackend.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ma.enset.ebankingbackend.dtos.CustomerDTO;
 import ma.enset.ebankingbackend.entities.*;
 import ma.enset.ebankingbackend.enums.AccountStatus;
 import ma.enset.ebankingbackend.enums.OperationType;
 import ma.enset.ebankingbackend.exceptions.BalanceNotSufficientException;
 import ma.enset.ebankingbackend.exceptions.BankAccountNotFoundException;
 import ma.enset.ebankingbackend.exceptions.CustomerNotFoundException;
+import ma.enset.ebankingbackend.mappers.BankAccountMapperImpl;
 import ma.enset.ebankingbackend.repositories.AccountOperationRepository;
 import ma.enset.ebankingbackend.repositories.BankAccountRepository;
 import ma.enset.ebankingbackend.repositories.CustomerRepository;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,7 +29,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     private BankAccountRepository bankAccountRepository;
     private CustomerRepository customerRepository;
     private AccountOperationRepository accountOperationRepository;
-
+    private BankAccountMapperImpl bankAccountMapper;
     @Override
     public Customer saveCustomer(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
@@ -74,8 +77,12 @@ public class BankAccountServiceImpl implements BankAccountService {
 
 
     @Override
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerDTO> getCustomers() {
+        List<Customer> custoemrs = customerRepository.findAll();
+        List<CustomerDTO> customerDTOS = custoemrs.stream()
+                .map(cust->bankAccountMapper.fromCustomerToCustomerDTO(cust))
+                .collect(Collectors.toList());
+        return customerDTOS;
     }
 
     @Override
@@ -124,5 +131,11 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Override
     public List<BankAccount> getAllBankAccounts() {
         return bankAccountRepository.findAll();
+    }
+    @Override
+    public CustomerDTO getCustomerById(long id) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer Not Found"));
+        return bankAccountMapper.fromCustomerToCustomerDTO(customer);
     }
 }

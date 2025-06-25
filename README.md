@@ -103,7 +103,3 @@ _M1 Big Data & Cloud Computing_
 📫 Contact: [Your Email or LinkedIn]
 
 ---
-
-## 🛡️ License
-
-This project is open-source and available under the [MIT License](LICENSE).

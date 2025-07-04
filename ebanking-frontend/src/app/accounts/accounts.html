@@ -1,1 +1,95 @@
-<p>accounts works!</p>
+<div class="container mt-2">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">Accounts</div>
+        <div class="card-body">
+          <form [formGroup]="accountFormGroup" (ngSubmit)="handleSearchAccount()">
+            <div class="input-group">
+              <label class="input-group-text">Account Id:</label>
+              <input type="text" formControlName="accountId" class="form-control">
+              <button type="submit" class="btn btn-info">
+                <i class="bi bi-search"></i>
+                Search
+              </button>
+            </div>
+          </form>
+          <ng-template #errorTemplate>
+            <ng-container *ngIf="errorMessage;else loading">
+              <div class="text-danger">{{errorMessage}}</div>
+            </ng-container>
+            <ng-template #loading>
+              loading ...
+            </ng-template>
+          </ng-template>
+          <ng-container *ngIf="accountObservable | async as accountDetails,else errorTemplate">
+            <div class="mb-2">
+              <label>Account Id: </label>
+              <label><strong>{{ accountDetails.accountId }}</strong></label>
+            </div>
+            <div class="mb-2">
+              <label>Balance: </label>
+              <label><strong>{{ accountDetails.balance | number : '1.2-2' }}</strong></label>
+            </div>
+            <table class="table">
+              <thead>
+                <th>ID</th><th>Date</th><th>Amount</th><th>Type</th>
+              </thead>
+              <tbody>
+              <tr *ngFor="let op of accountDetails.operations">
+                <td>{{op.id}}</td>
+                <td>{{op.operationDate | date :'dd-MM-yyyy HH:mm:ss'}}</td>
+                <td class="text-end">{{op.amount | number : '1.2-2'}}</td>
+                <td>{{op.type}}</td>
+              </tr>
+              </tbody>
+            </table>
+            <ul class="nav nav-pills d-flex justify-content-center">
+              <li *ngFor="let item of [].constructor(accountDetails.totalPages);let  page = index">
+                <a [ngClass]="page==currentPage?'btn-info':'btn-outline-info'" (click)="goToPage(page)" class="btn ms-1 mt-1">{{page}}</a>
+              </li>
+            </ul>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card" *ngIf="accountObservable">
+        <div class="card-header">
+          Operations
+        </div>
+        <div class="card-body">
+          <form [formGroup]="operationFormGroup" method="post" (ngSubmit)="handleAccountOperation()">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">DEBIT</label>
+              <input class="form-check-input" type="radio" formControlName="operationType" value="DEBIT">
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">CREDIT</label>
+              <input class="form-check-input" type="radio" formControlName="operationType" value="CREDIT">
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">TRANSFER</label>
+              <input class="form-check-input" type="radio" formControlName="operationType" value="TRANSFER">
+            </div>
+            <div class="mb-3" *ngIf="operationFormGroup.value.operationType=='TRANSFER'">
+              <label class="form-label">Receiver:</label>
+              <input class="form-control" type="text" formControlName="accountDestination">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Amount:</label>
+              <input class="form-control" type="text" formControlName="amount">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description:</label>
+              <input class="form-control" type="text" formControlName="description">
+            </div>
+            <div class="d-grid">
+              <button class="btn btn-success"> Save Operation</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

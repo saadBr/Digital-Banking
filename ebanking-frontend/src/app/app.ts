@@ -4,10 +4,11 @@ import { Navbar} from './navbar/navbar';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Customers} from './customers/customers';
 import {Accounts} from './accounts/accounts';
+import {Login} from './login/login';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,Navbar,FormsModule,Customers,Accounts,ReactiveFormsModule],
+  imports: [RouterOutlet,Navbar,FormsModule,Customers,Accounts,ReactiveFormsModule,Login],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

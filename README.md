@@ -1,105 +1,133 @@
-# 💳 E-Banking Backend API
+# 💳 E-Banking System (Full Stack)
 
-This is the backend implementation of a **Digital Banking System** built using **Spring Boot**, following clean architecture principles, DTO usage, layered services, and RESTful API conventions.
-
-> 📌 The project is still in progress — frontend (Angular) will be added later.
+This is a **full-stack digital banking application** built with **Spring Boot (Java)** on the backend and **Angular** on the frontend.
 
 ---
 
 ## 🚀 Features
 
-- Customer & Bank Account Management
-- Current & Saving Account Types (via Inheritance)
-- Account Operations:
-  - ✅ Credit
-  - ✅ Debit
-  - 🔁 Transfer between accounts
-- Transaction History with Pagination
-- RESTful API with Swagger UI
-- DTO abstraction layer for clean API interaction
-- Exception handling for common banking errors
+### 🔐 Authentication & Authorization
+
+- Login with JWT-based authentication
+- Role-based access control using scopes (`USER`, `ADMIN`)
+- Protected routes using Angular Guards and Interceptors
+
+### 👥 Customer Management
+
+- View all customers
+- Add, update, delete customers
+- Search customers by keyword
+
+### 💰 Account Operations
+
+- View bank accounts (current/saving)
+- Credit & debit account balances
+- Transfer between accounts
+- View transaction history (with pagination)
 
 ---
 
 ## 🧱 Tech Stack
 
-| Layer           | Tech                             |
-|----------------|----------------------------------|
-| Framework      | Spring Boot                      |
-| ORM            | Spring Data JPA, Hibernate       |
-| Database       | H2 (in-memory) or MySQL/PostgreSQL |
-| API Docs       | Swagger (Springdoc OpenAPI)      |
-| Logging        | Lombok + SLF4J                   |
-| Build Tool     | Maven                            |
-| Java Version   | Java 17+                         |
+| Layer    | Technology                    |
+| -------- | ----------------------------- |
+| Frontend | Angular 17+                   |
+| Backend  | Spring Boot, Spring Security  |
+| Auth     | JWT, Interceptor, Route Guard |
+| Database | H2 / MySQL                    |
+| Docs     | Swagger UI                    |
+| Build    | Maven                         |
+| Language | Java 17+, TypeScript          |
 
 ---
 
-## 🗂️ Project Structure
+## 📦 Project Structure
+
+### Backend: `ebanking-backend/`
 
 ```
-ebanking-backend/
-│
-├── entities/               # JPA Entities
-├── dtos/                   # Data Transfer Objects
-├── services/               # Business Logic (Interfaces + Implementations)
-├── repositories/           # Spring Data JPA Interfaces
-├── web/                    # REST Controllers
-├── enums/                  # Enum Types (AccountStatus, OperationType)
-├── mappers/                # Entity-DTO Converters (MapStruct or manual)
-└── exceptions/             # Custom exceptions
+├── config/             # Spring Security config
+├── controllers/        # REST APIs
+├── services/           # Business logic
+├── entities/           # JPA entities
+├── dtos/               # Data Transfer Objects
+├── repositories/       # Spring Data JPA
+├── mappers/            # DTO ↔ Entity conversion
+├── exceptions/         # Custom exceptions
+└── resources/          # application.properties etc.
+```
+
+### Frontend: `ebanking-frontend/`
+
+```
+├── app/
+│   ├── services/           # Auth + HTTP services
+│   ├── guards/             # Route guards (canActivate)
+│   ├── interceptors/       # HTTP Interceptor for Bearer token
+│   ├── login/              # Login page
+│   ├── customers/          # Customers view
+│   ├── accounts/           # Accounts view
+│   ├── new-customer/       # Add customer form
+│   └── admin-template/     # Shell layout (navbar + router-outlet)
 ```
 
 ---
 
-## 📬 Sample Endpoints
+## 🔑 Authentication Flow
 
-| Method | Endpoint                          | Description                       |
-|--------|-----------------------------------|-----------------------------------|
-| `GET`  | `/accounts/{id}`                  | Get account details               |
-| `POST` | `/accounts/debit`                 | Debit from account                |
-| `POST` | `/accounts/credit`                | Credit to account                 |
-| `POST` | `/accounts/transfer`              | Transfer between two accounts     |
-| `GET`  | `/accounts/{id}/operations`       | Get full transaction history      |
-| `GET`  | `/accounts/{id}/pageOperations`   | Get paginated transaction history |
-
-Use [Swagger UI](http://localhost:8080/swagger-ui.html) to explore and test endpoints.
+- On successful login, backend returns a JWT token
+- Token is saved to `localStorage`
+- Angular interceptor adds `Authorization: Bearer <token>` to all HTTP requests
+- Route guard (`canActivate`) protects `/admin` routes
 
 ---
 
-## ▶️ Run Locally
+## 📬 Key Backend Endpoints
 
-1. **Clone the repo**
+| Method   | Endpoint                        | Description              |
+| -------- | ------------------------------- | ------------------------ |
+| `GET`    | `/customers`                    | List all customers       |
+| `GET`    | `/customers/search?keyword=xyz` | Search customers by name |
+| `POST`   | `/customers`                    | Create new customer      |
+| `PUT`    | `/customers/{id}`               | Update existing customer |
+| `DELETE` | `/customers/{id}`               | Delete customer          |
+| `GET`    | `/accounts/{id}`                | View account details     |
+| `POST`   | `/accounts/debit`               | Debit account            |
+| `POST`   | `/accounts/credit`              | Credit account           |
+| `POST`   | `/accounts/transfer`            | Transfer funds           |
+
+> 🔐 All endpoints are secured using Spring Security + JWT scopes.
+
+---
+
+## ▶️ Run Backend
+
 ```bash
-git clone https://github.com/yourusername/ebanking-backend.git
 cd ebanking-backend
-```
-
-2. **Build the project**
-```bash
-./mvnw clean install
-```
-
-3. **Run it**
-```bash
 ./mvnw spring-boot:run
 ```
 
+### 🧪 Access Swagger UI:
+
+[http://localhost:8085/swagger-ui.html](http://localhost:8085/swagger-ui.html)
+
 ---
 
-## 📌 Next Steps
+## ▶️ Run Frontend
 
-- [ ] Add Angular frontend for GUI interactions
-- [ ] Implement JWT-based authentication
-- [ ] Add unit & integration tests
-- [ ] Containerize with Docker
+```bash
+cd ebanking-frontend
+npm install
+ng serve
+```
+
+App will run at: [http://localhost:4200](http://localhost:4200)
 
 ---
 
 ## 👤 Author
 
-**Saad El Mabrouk**  
-_M1 Big Data & Cloud Computing_  
-📫 Contact: [Your Email or LinkedIn]
+**Saad El Mabrouk**\
 
 ---
+

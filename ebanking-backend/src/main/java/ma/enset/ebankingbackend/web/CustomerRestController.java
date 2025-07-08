@@ -26,11 +26,18 @@ public class CustomerRestController {
     public CustomerDTO getCustomer(@PathVariable(name = "id") Long customerId) throws CustomerNotFoundException {
         return bankAccountService.getCustomerById(customerId);
     }
+    @GetMapping("/customers/search")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
+    public List<CustomerDTO> searchCustomers(@RequestParam(name = "keyword",defaultValue = "")String keyword) {
+
+        return bankAccountService.searchCustomer("%"+keyword+"%");
+    }
     @PostMapping("/customers")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO) {
         return bankAccountService.saveCustomer(customerDTO);
     }
+
     @PutMapping("/customers/{customerID}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public CustomerDTO updateCustomer(@PathVariable long customerID, @RequestBody CustomerDTO customerDTO) throws CustomerNotFoundException {

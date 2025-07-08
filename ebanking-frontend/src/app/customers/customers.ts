@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-customers',
   imports: [CommonModule, ReactiveFormsModule],
+  standalone: true,
   templateUrl: './customers.html',
   styleUrl: './customers.css'
 })

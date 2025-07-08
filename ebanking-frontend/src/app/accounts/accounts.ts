@@ -8,6 +8,7 @@ import {CommonModule} from '@angular/common';
 @Component({
   selector: 'app-accounts',
   imports: [ReactiveFormsModule, CommonModule],
+  standalone: true,
   templateUrl: './accounts.html',
   styleUrl: './accounts.css'
 })

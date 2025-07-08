@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import {Navbar} from '../navbar/navbar';
+import {RouterLink, RouterModule} from '@angular/router'
 
 @Component({
   selector: 'app-admin-template',
   imports: [
-    Navbar
+    Navbar, RouterLink,RouterModule
   ],
+  standalone: true,
   templateUrl: './admin-template.html',
   styleUrl: './admin-template.css'
 })

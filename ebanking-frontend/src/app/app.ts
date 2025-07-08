@@ -9,6 +9,7 @@ import {Login} from './login/login';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet,Navbar,FormsModule,Customers,Accounts,ReactiveFormsModule,Login],
+  standalone: true,
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

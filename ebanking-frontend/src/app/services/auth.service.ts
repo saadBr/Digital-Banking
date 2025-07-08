@@ -20,7 +20,7 @@ export class AuthService {
   }
   loadProfile(data:any){
     this.isAuthenticated=true;
-    this.accessToken = data['access-token'];
+    this.accessToken = data['access_token'];
     let jwtDecoded:any = jwtDecode(this.accessToken);
     this.username = jwtDecoded.sub;
     this.roles = jwtDecoded.scope;

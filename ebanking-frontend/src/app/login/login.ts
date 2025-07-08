@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AuthService} from '../services/auth.service'
+import {Router} from '@angular/router'
 @Component({
   selector: 'app-login',
   imports: [CommonModule, ReactiveFormsModule],
@@ -10,7 +11,7 @@ import {AuthService} from '../services/auth.service'
 })
 export class Login implements OnInit{
   formLogin!: FormGroup;
-  constructor(private fb : FormBuilder, private authService: AuthService) {
+  constructor(private fb : FormBuilder, private authService: AuthService, private router:Router) {
   }
 
   ngOnInit(): void {
@@ -25,7 +26,8 @@ export class Login implements OnInit{
     let password = this.formLogin.value.password;
     this.authService.login(username,password).subscribe({
       next:data =>{
-        console.log(data);
+        this.authService.loadProfile(data);
+        this.router.navigateByUrl("/admin")
       },
       error:err=>{
         console.log(err);

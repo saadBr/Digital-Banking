@@ -56,6 +56,6 @@ export class Customers implements OnInit{
   }
 
   handleCustomerAccount(c: Customer) {
-    this.router.navigateByUrl("customer-accounts/"+c.id);
+    this.router.navigateByUrl("/admin/customer-accounts/"+c.id,{state:c});
   }
 }

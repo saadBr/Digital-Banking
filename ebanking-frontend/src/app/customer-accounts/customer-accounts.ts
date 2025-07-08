@@ -1,15 +1,20 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import {Customer} from "../model/customer.model";
 
 @Component({
   selector: 'app-customer-accounts',
-  imports: [],
+  imports: [CommonModule],
+  standalone: true,
   templateUrl: './customer-accounts.html',
   styleUrl: './customer-accounts.css'
 })
 export class CustomerAccounts implements OnInit{
   customerId!:string;
-  constructor(private route:ActivatedRoute) {
+  customer! : Customer;
+  constructor(private route:ActivatedRoute, private router:Router) {
+    this.customer=this.router.getCurrentNavigation()?.extras.state as Customer;
   }
     ngOnInit(): void {
         this.customerId=this.route.snapshot.params['id'];

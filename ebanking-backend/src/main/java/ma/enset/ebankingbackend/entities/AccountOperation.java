@@ -19,4 +19,6 @@ public class AccountOperation {
     @ManyToOne
     private BankAccount bankAccount;
     private String description;
+    @ManyToOne
+    private User performedBy;
 }

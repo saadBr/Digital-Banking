@@ -24,8 +24,11 @@ public class SecurityController {
     @Autowired
     private JwtEncoder jwtEncoder;
     @GetMapping("/profile")
-    public Authentication authentication(Authentication auth) {
-        return auth;
+    public Map<String, Object> authentication(Authentication auth) {
+        return Map.of(
+                "username", auth.getName(),
+                "roles", auth.getAuthorities()
+        );
     }
     @PostMapping("/login")
     public Map<String, String> login(String username, String password) {

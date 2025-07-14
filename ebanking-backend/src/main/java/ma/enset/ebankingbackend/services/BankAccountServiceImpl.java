@@ -13,9 +13,12 @@ import ma.enset.ebankingbackend.mappers.BankAccountMapperImpl;
 import ma.enset.ebankingbackend.repositories.AccountOperationRepository;
 import ma.enset.ebankingbackend.repositories.BankAccountRepository;
 import ma.enset.ebankingbackend.repositories.CustomerRepository;
+import ma.enset.ebankingbackend.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,9 +36,15 @@ public class BankAccountServiceImpl implements BankAccountService {
     private CustomerRepository customerRepository;
     private AccountOperationRepository accountOperationRepository;
     private BankAccountMapperImpl bankAccountMapper;
+    private UserRepository userRepository;
     @Override
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+
         Customer customer = bankAccountMapper.fromCustomerDTOToCustomer(customerDTO);
+        customer.setCreatedBy(user);
         Customer savedCustomer = customerRepository.save(customer);
         log.info("Saving new customer");
         return bankAccountMapper.fromCustomerToCustomerDTO(savedCustomer);
@@ -47,6 +56,11 @@ public class BankAccountServiceImpl implements BankAccountService {
         if (customer == null) {
             throw new CustomerNotFoundException("Customer not found");
         }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+
         CurrentAccount currentAccount = new CurrentAccount();
 
         currentAccount.setId(UUID.randomUUID().toString());
@@ -55,8 +69,8 @@ public class BankAccountServiceImpl implements BankAccountService {
         currentAccount.setStatus(AccountStatus.CREATED);
         currentAccount.setCustomer(customer);
         currentAccount.setOverdraftLimit(overDraft);
+        currentAccount.setCreatedBy(user);
         CurrentAccount savedCurrentAccount = bankAccountRepository.save(currentAccount);
-
         return bankAccountMapper.fromCurrentAccountToCurrentAccountDTO(savedCurrentAccount);
     }
 
@@ -67,6 +81,9 @@ public class BankAccountServiceImpl implements BankAccountService {
             throw new CustomerNotFoundException("Customer not found");
         }
         SavingAccount savingAccount = new SavingAccount();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
 
         savingAccount.setId(UUID.randomUUID().toString());
         savingAccount.setBalance(initialBalance);
@@ -74,6 +91,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         savingAccount.setStatus(AccountStatus.CREATED);
         savingAccount.setCustomer(customer);
         savingAccount.setInterestRate(interestRate);
+        savingAccount.setCreatedBy(user);
         SavingAccount savedSavingAccount = bankAccountRepository.save(savingAccount);
 
         return bankAccountMapper.fromSavingAccountToSavingAccountDTO(savedSavingAccount);
@@ -110,12 +128,17 @@ public class BankAccountServiceImpl implements BankAccountService {
         if(bankAccount.getBalance() < amount) {
             throw new BalanceNotSufficientException("Balance Not Sufficient");
         }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+
         AccountOperation accountOperation = new AccountOperation();
         accountOperation.setBankAccount(bankAccount);
         accountOperation.setAmount(amount);
         accountOperation.setDescription(description);
         accountOperation.setType(OperationType.DEBIT);
         accountOperation.setOperationDate(new Date());
+        accountOperation.setPerformedBy(user);
         accountOperationRepository.save(accountOperation);
         bankAccount.setBalance(bankAccount.getBalance() - amount);
         bankAccountRepository.save(bankAccount);
@@ -125,12 +148,16 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void credit(String id, double amount, String description) throws BankAccountNotFoundException {
         BankAccount bankAccount = bankAccountRepository.findById(id)
                 .orElseThrow(()-> new BankAccountNotFoundException("Bank Account Not Found"));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
         AccountOperation accountOperation = new AccountOperation();
         accountOperation.setBankAccount(bankAccount);
         accountOperation.setAmount(amount);
         accountOperation.setDescription(description);
         accountOperation.setType(OperationType.CREDIT);
         accountOperation.setOperationDate(new Date());
+        accountOperation.setPerformedBy(user);
         accountOperationRepository.save(accountOperation);
         bankAccount.setBalance(bankAccount.getBalance() + amount);
         bankAccountRepository.save(bankAccount);

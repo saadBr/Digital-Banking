@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import ma.enset.ebankingbackend.dtos.*;
 import ma.enset.ebankingbackend.exceptions.BalanceNotSufficientException;
 import ma.enset.ebankingbackend.exceptions.BankAccountNotFoundException;
+import ma.enset.ebankingbackend.exceptions.CustomerNotFoundException;
 import ma.enset.ebankingbackend.services.BankAccountService;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class BankAccountRestController {
     }
     @PostMapping("accounts/credit")
     public CreditDTO credit(@RequestBody CreditDTO creditDTO) throws BankAccountNotFoundException, BalanceNotSufficientException {
-        bankAccountService.debit(creditDTO.getAccountId(),creditDTO.getAmount(),creditDTO.getDescription());
+        bankAccountService.credit(creditDTO.getAccountId(),creditDTO.getAmount(),creditDTO.getDescription());
         return creditDTO;
     }
     @PostMapping("/accounts/transfer")
@@ -48,6 +49,27 @@ public class BankAccountRestController {
                 transferDTO.getAccountSource(),
                 transferDTO.getAccountDestination(),
                 transferDTO.getAmount());
+    }
+
+    @PostMapping("/accounts")
+    public BankAccountDTO create(@RequestBody BankAccountRequestDTO bankAccountRequestDTO) throws BankAccountNotFoundException, CustomerNotFoundException {
+        if("current".equalsIgnoreCase(bankAccountRequestDTO.getType())){
+
+            return bankAccountService.saveCurrentBankAccount(
+                bankAccountRequestDTO.getInitialBalance(),
+                bankAccountRequestDTO.getOverdraft(),
+                bankAccountRequestDTO.getCustomerId()
+            );
+        } else if ("saving".equalsIgnoreCase(bankAccountRequestDTO.getType())) {
+            return bankAccountService.saveSavingBankAccount(
+                    bankAccountRequestDTO.getInitialBalance(),
+                    bankAccountRequestDTO.getInterestRate(),
+                    bankAccountRequestDTO.getCustomerId()
+            );
+        }
+        else {
+            throw new IllegalArgumentException("Unsupported bank account type");
+        }
     }
 
 

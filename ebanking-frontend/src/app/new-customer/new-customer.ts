@@ -27,7 +27,7 @@ export class NewCustomer implements OnInit{
     this.customerService.saveCustomer(customer).subscribe({
       next: data =>{
         alert("Customer saved successfully!");
-        this.router.navigateByUrl("/customers");
+        this.router.navigateByUrl("/admin/customers");
       },
       error:err => {
         console.log(err);

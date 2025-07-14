@@ -9,6 +9,7 @@ import {AdminTemplate} from './admin-template/admin-template';
 import {authenticationGuard} from './guards/authentication-guard'
 import {authorizationGuard} from "./guards/authorization-guard";
 import {NotAutorized} from "./not-autorized/not-autorized";
+import { Dashboard } from './dashboard/dashboard';
 export const routes: Routes = [
   {path:"", redirectTo:"/login", pathMatch:"full"},
   {path: "login", component:Login},
@@ -17,7 +18,8 @@ export const routes: Routes = [
     {path: "accounts", component:Accounts},
     {path: "new-customer", component:NewCustomer, canActivate:[authorizationGuard], data:{role:"ADMIN"}},
     {path: "customer-accounts/:id", component:CustomerAccounts},
-    {path: "notAuthorized", component:NotAutorized}
+    {path: "notAuthorized", component:NotAutorized},
+    {path: "dashboard", component:Dashboard}
     ]},
 ];
 

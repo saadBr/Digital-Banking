@@ -1,0 +1,35 @@
+<div class="dashboard-wrapper">
+  <h1 class="title text-center">📊 Dashboard</h1>
+
+  <div class="stats-cards">
+    <div class="stat-card" *ngFor="let stat of statCards">
+      <h4>{{stat.label}}</h4>
+      <p>{{stat.value}}</p>
+    </div>
+  </div>
+
+  <div class="charts-section">
+    <div class="card chart-card">
+        <h5 class="card-title text-center">Accounts Distribution</h5>
+        <div class="chart-wrapper">
+            <canvas baseChart [data]="pieChartData" [type]="chartType"
+            [options]="{ maintainAspectRatio: false, responsive: true }"></canvas>
+        </div>
+    </div>
+
+    <div class="card chart-card">
+        <h5 class="card-title text-center">Operations by Type</h5>
+        <div class="chart-wrapper">
+            <canvas baseChart [data]="barChartData" [type]="barChartType"
+            [options]="{ maintainAspectRatio: false, responsive: true }"></canvas>
+        </div>
+    </div>
+
+    <div class="card chart-card">
+        <h5 class="card-title text-center">Active Customers</h5>
+        <div class="chart-wrapper">
+            <canvas baseChart [data]="barChartMostActiveData" [type]="barChartType"></canvas>
+        </div>
+    </div>
+  </div>
+</div>

@@ -2,13 +2,19 @@ package ma.enset.ebankingbackend.web;
 
 import lombok.AllArgsConstructor;
 import ma.enset.ebankingbackend.dtos.*;
+import ma.enset.ebankingbackend.enums.AccountStatus;
 import ma.enset.ebankingbackend.exceptions.BalanceNotSufficientException;
 import ma.enset.ebankingbackend.exceptions.BankAccountNotFoundException;
 import ma.enset.ebankingbackend.exceptions.CustomerNotFoundException;
 import ma.enset.ebankingbackend.services.BankAccountService;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -71,6 +77,46 @@ public class BankAccountRestController {
             throw new IllegalArgumentException("Unsupported bank account type");
         }
     }
+    @PatchMapping("/accounts/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateStatus(
+            @PathVariable String id,
+            @RequestBody Map<String, String> payload) throws BankAccountNotFoundException {
+
+        String status = payload.get("status");
+        AccountStatus newStatus;
+        try {
+            newStatus = AccountStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid status value: " + status);
+        }
+
+        bankAccountService.updateAccountStatus(id, newStatus);
+        return ResponseEntity.ok("Status updated to " + newStatus);
+    }
+    @PatchMapping("/operations/{id}/cancel")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> cancelOperation(@PathVariable Long id) throws BankAccountNotFoundException {
+        bankAccountService.cancelOperation(id);
+        return ResponseEntity.ok("Operation cancelled");
+    }
+
+    @GetMapping("/accounts/{accountId}/operations/search")
+    @PreAuthorize("hasRole('ADMIN')")
+    public AccountHistoryDTO searchOperations(
+            @PathVariable String accountId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) Double minAmount,
+            @RequestParam(required = false) Double maxAmount,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) throws BankAccountNotFoundException {
+        return bankAccountService.searchOperations(accountId, startDate, endDate, minAmount, maxAmount, page, size);
+    }
+
+
+
 
 
 }

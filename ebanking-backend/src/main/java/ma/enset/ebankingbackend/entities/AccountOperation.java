@@ -21,4 +21,6 @@ public class AccountOperation {
     private String description;
     @ManyToOne
     private User performedBy;
+    @Column(name = "is_cancelled", nullable = false)
+    private boolean cancelled = false;
 }

@@ -17,11 +17,14 @@ import ma.enset.ebankingbackend.repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -66,7 +69,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         currentAccount.setId(UUID.randomUUID().toString());
         currentAccount.setBalance(initialBalance);
         currentAccount.setDateCreated(new Date());
-        currentAccount.setStatus(AccountStatus.CREATED);
+        currentAccount.setStatus(AccountStatus.ACTIVE);
         currentAccount.setCustomer(customer);
         currentAccount.setOverdraftLimit(overDraft);
         currentAccount.setCreatedBy(user);
@@ -88,7 +91,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         savingAccount.setId(UUID.randomUUID().toString());
         savingAccount.setBalance(initialBalance);
         savingAccount.setDateCreated(new Date());
-        savingAccount.setStatus(AccountStatus.CREATED);
+        savingAccount.setStatus(AccountStatus.PENDING);
         savingAccount.setCustomer(customer);
         savingAccount.setInterestRate(interestRate);
         savingAccount.setCreatedBy(user);
@@ -125,6 +128,9 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void debit(String id, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException {
         BankAccount bankAccount = bankAccountRepository.findById(id)
                 .orElseThrow(()-> new BankAccountNotFoundException("Bank Account Not Found"));
+        if (bankAccount.getStatus() != AccountStatus.PENDING) {
+            throw new IllegalStateException("Account is not active");
+        }
         if(bankAccount.getBalance() < amount) {
             throw new BalanceNotSufficientException("Balance Not Sufficient");
         }
@@ -139,6 +145,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         accountOperation.setType(OperationType.DEBIT);
         accountOperation.setOperationDate(new Date());
         accountOperation.setPerformedBy(user);
+        accountOperation.setCancelled(false);
         accountOperationRepository.save(accountOperation);
         bankAccount.setBalance(bankAccount.getBalance() - amount);
         bankAccountRepository.save(bankAccount);
@@ -148,6 +155,9 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void credit(String id, double amount, String description) throws BankAccountNotFoundException {
         BankAccount bankAccount = bankAccountRepository.findById(id)
                 .orElseThrow(()-> new BankAccountNotFoundException("Bank Account Not Found"));
+        if (bankAccount.getStatus() != AccountStatus.ACTIVE) {
+            throw new IllegalStateException("Account is not active");
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userRepository.findByUsername(username).orElseThrow();
@@ -158,6 +168,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         accountOperation.setType(OperationType.CREDIT);
         accountOperation.setOperationDate(new Date());
         accountOperation.setPerformedBy(user);
+        accountOperation.setCancelled(false);
         accountOperationRepository.save(accountOperation);
         bankAccount.setBalance(bankAccount.getBalance() + amount);
         bankAccountRepository.save(bankAccount);
@@ -214,7 +225,7 @@ public class BankAccountServiceImpl implements BankAccountService {
             throw new BankAccountNotFoundException("Account not found");
         }
 
-        Page<AccountOperation> accountOperations = accountOperationRepository.findBybankAccountId(accountId, PageRequest.of(page,size));
+        Page<AccountOperation> accountOperations = accountOperationRepository.findBybankAccountId(accountId, PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,"operationDate")));
         AccountHistoryDTO accountHistoryDTO = new AccountHistoryDTO();
         List<AccountOperationDTO> accountOperationDTOS = accountOperations.getContent().stream().map(
                         op -> bankAccountMapper.fromAccountToAccountOperationDTO(op))
@@ -225,6 +236,7 @@ public class BankAccountServiceImpl implements BankAccountService {
         accountHistoryDTO.setPageSize(size);
         accountHistoryDTO.setCurrentPage(page);
         accountHistoryDTO.setTotalPages(accountOperations.getTotalPages());
+        accountHistoryDTO.setStatus(bankAccount.getStatus());
         return accountHistoryDTO;
     }
     @Override
@@ -233,4 +245,89 @@ public class BankAccountServiceImpl implements BankAccountService {
         List<CustomerDTO> customerDTOS =customers.stream().map(customer -> bankAccountMapper.fromCustomerToCustomerDTO(customer)).collect(Collectors.toList());
         return customerDTOS;
     }
+
+    @Override
+    public List<BankAccountDTO> getAccountsByCustomerId(Long customerId) throws CustomerNotFoundException {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found"));
+        return customer.getBankAccounts()
+                .stream()
+                .map(account -> {
+                    if (account instanceof SavingAccount) {
+                        return bankAccountMapper.fromSavingAccountToSavingAccountDTO((SavingAccount) account);
+                    } else {
+                        return bankAccountMapper.fromCurrentAccountToCurrentAccountDTO((CurrentAccount) account);
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateAccountStatus(String id, AccountStatus status) throws BankAccountNotFoundException {
+        BankAccount bankAccount = bankAccountRepository.findById(id)
+                .orElseThrow(() -> new BankAccountNotFoundException("Bank account not found"));
+        bankAccount.setStatus(status);
+        bankAccountRepository.save(bankAccount);
+    }
+
+    @Override
+    public void cancelOperation(Long id) throws BankAccountNotFoundException {
+        AccountOperation op = accountOperationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Operation not found"));
+
+        if (op.isCancelled()) throw new RuntimeException("Already cancelled");
+
+        BankAccount account = op.getBankAccount();
+
+        if (op.getType() == OperationType.DEBIT) {
+            account.setBalance(account.getBalance() + op.getAmount());
+        } else if (op.getType() == OperationType.CREDIT) {
+            if (account.getBalance() < op.getAmount())
+                throw new RuntimeException("Insufficient balance to reverse credit");
+
+            account.setBalance(account.getBalance() - op.getAmount());
+        }
+
+        op.setCancelled(true);
+        accountOperationRepository.save(op);
+        bankAccountRepository.save(account);
+    }
+
+    @Override
+    public AccountHistoryDTO searchOperations(String accountId, LocalDate startDate, LocalDate endDate,
+                                              Double minAmount, Double maxAmount, int page, int size) throws BankAccountNotFoundException {
+
+        BankAccount account = bankAccountRepository.findById(accountId)
+                .orElseThrow(() -> new BankAccountNotFoundException("Account not found"));
+        Timestamp startTimestamp = null;
+        Timestamp endTimestamp = null;
+
+        if (startDate != null) {
+            startTimestamp = Timestamp.valueOf(startDate.atStartOfDay());
+        }
+        if (endDate != null) {
+            endTimestamp = Timestamp.valueOf(endDate.plusDays(1).atStartOfDay().minusNanos(1));
+        }
+
+        Page<AccountOperation> operationsPage = accountOperationRepository.searchOperations(
+                accountId, startTimestamp, endTimestamp, minAmount, maxAmount,
+                PageRequest.of(page, size, Sort.by("operationDate").descending())
+        );
+
+        AccountHistoryDTO dto = new AccountHistoryDTO();
+        dto.setAccountId(account.getId());
+        dto.setBalance(account.getBalance());
+        dto.setCurrentPage(page);
+        dto.setPageSize(size);
+        dto.setTotalPages(operationsPage.getTotalPages());
+        dto.setStatus(account.getStatus());
+        dto.setOperations(operationsPage.getContent().stream()
+                .map(operation -> bankAccountMapper.fromAccountToAccountOperationDTO(operation))
+                .toList());
+
+        return dto;
+
+    }
+
+
 }

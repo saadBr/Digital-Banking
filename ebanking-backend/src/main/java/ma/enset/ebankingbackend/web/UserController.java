@@ -2,6 +2,7 @@ package ma.enset.ebankingbackend.web;
 
 import lombok.RequiredArgsConstructor;
 import ma.enset.ebankingbackend.dtos.PasswordChangeRequest;
+import ma.enset.ebankingbackend.dtos.PasswordResetRequest;
 import ma.enset.ebankingbackend.entities.User;
 import ma.enset.ebankingbackend.repositories.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,4 +38,14 @@ public class UserController {
 
         return "Password updated successfully!";
     }
+
+    @PostMapping("/reset-password")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String resetPassword(@RequestBody PasswordResetRequest request) {
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+        return "Password reset successfully for user: " + request.getUsername();
+    }
+
 }

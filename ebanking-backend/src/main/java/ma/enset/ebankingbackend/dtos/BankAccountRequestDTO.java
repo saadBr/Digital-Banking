@@ -9,4 +9,5 @@ public class BankAccountRequestDTO {
     private double interestRate;
     private Long customerId;
     private String type;
+
 }

@@ -28,6 +28,7 @@ public class BankAccountMapperImpl {
         BeanUtils.copyProperties(currentAccount, currentAccountDTO);
         currentAccountDTO.setCustomer(fromCustomerToCustomerDTO(currentAccount.getCustomer()));
         currentAccountDTO.setType(currentAccount.getClass().getSimpleName());
+        currentAccountDTO.setStatus(currentAccount.getStatus());
         return currentAccountDTO;
     }
     public CurrentAccount fromCurrentAccountDTOToCurrentAccount(CurrentAccountDTO currentAccountDTO) {
@@ -41,6 +42,7 @@ public class BankAccountMapperImpl {
         BeanUtils.copyProperties(savingAccount, savingAccountDTO);
         savingAccountDTO.setCustomer(fromCustomerToCustomerDTO(savingAccount.getCustomer()));
         savingAccountDTO.setType(savingAccount.getClass().getSimpleName());
+        savingAccountDTO.setStatus(savingAccount.getStatus());
         return savingAccountDTO;
     }
     public SavingAccount fromSavingAccountDTOToSavingAccount(SavingAccountDTO savingAccountDTO) {

@@ -87,7 +87,7 @@ public class EbankingBackendApplication {
                 currentAccount.setBalance(Math.random() * 90000);
                 currentAccount.setDateCreated(new Date());
                 currentAccount.setCustomer(customer);
-                currentAccount.setStatus(AccountStatus.CREATED);
+                currentAccount.setStatus(AccountStatus.PENDING);
                 currentAccount.setOverdraftLimit(9000);
                 bankAccountRepository.save(currentAccount);
 
@@ -96,7 +96,7 @@ public class EbankingBackendApplication {
                 savingAccount.setBalance(Math.random() * 90000);
                 savingAccount.setDateCreated(new Date());
                 savingAccount.setCustomer(customer);
-                savingAccount.setStatus(AccountStatus.CREATED);
+                savingAccount.setStatus(AccountStatus.PENDING);
                 savingAccount.setInterestRate(4.5);
                 bankAccountRepository.save(savingAccount);
             });

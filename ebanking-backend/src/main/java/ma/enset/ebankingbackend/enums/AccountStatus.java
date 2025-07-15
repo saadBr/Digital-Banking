@@ -1,7 +1,9 @@
 package ma.enset.ebankingbackend.enums;
 
 public enum AccountStatus {
-    CREATED,
-    SUSPENDED,
-    ACTIVATED
+    ACTIVE,
+    INACTIVE,
+    BLOCKED,
+    CLOSED,
+    PENDING
 }

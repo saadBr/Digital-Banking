@@ -2,10 +2,12 @@ package ma.enset.ebankingbackend.services;
 
 import ma.enset.ebankingbackend.dtos.*;
 import ma.enset.ebankingbackend.entities.*;
+import ma.enset.ebankingbackend.enums.AccountStatus;
 import ma.enset.ebankingbackend.exceptions.BalanceNotSufficientException;
 import ma.enset.ebankingbackend.exceptions.BankAccountNotFoundException;
 import ma.enset.ebankingbackend.exceptions.CustomerNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface BankAccountService {
@@ -31,4 +33,12 @@ public interface BankAccountService {
     AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
 
     List<CustomerDTO> searchCustomer(String s);
+
+    List<BankAccountDTO> getAccountsByCustomerId(Long customerID) throws CustomerNotFoundException;
+
+    void updateAccountStatus(String id, AccountStatus status) throws BankAccountNotFoundException;
+
+    void cancelOperation(Long id) throws BankAccountNotFoundException;
+
+    AccountHistoryDTO searchOperations(String accountId, LocalDate startDate, LocalDate endDate, Double minAmount, Double maxAmount, int page, int size) throws BankAccountNotFoundException;
 }

@@ -10,6 +10,8 @@ import {authenticationGuard} from './guards/authentication-guard'
 import {authorizationGuard} from "./guards/authorization-guard";
 import {NotAutorized} from "./not-autorized/not-autorized";
 import { Dashboard } from './dashboard/dashboard';
+import { NewAccount } from './new-account/new-account';
+import { ChangePassword } from './change-password/change-password';
 export const routes: Routes = [
   {path:"", redirectTo:"/login", pathMatch:"full"},
   {path: "login", component:Login},
@@ -19,7 +21,9 @@ export const routes: Routes = [
     {path: "new-customer", component:NewCustomer, canActivate:[authorizationGuard], data:{role:"ADMIN"}},
     {path: "customer-accounts/:id", component:CustomerAccounts},
     {path: "notAuthorized", component:NotAutorized},
-    {path: "dashboard", component:Dashboard}
+    {path: "dashboard", component:Dashboard},
+    {path: "customer-accounts/:id/new-account",component: NewAccount},
+    {path: 'change-password', component: ChangePassword }
     ]},
 ];
 

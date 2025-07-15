@@ -5,6 +5,7 @@ export interface AccountDetails {
   pageSize:    number;
   totalPages:  number;
   operations:  Operation[];
+  status: string;
 }
 
 export interface Operation {
@@ -13,4 +14,5 @@ export interface Operation {
   amount:        number;
   type:          string;
   description:   string;
+  cancelled?:    boolean;
 }

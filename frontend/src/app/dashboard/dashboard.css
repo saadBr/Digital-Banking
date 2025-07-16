@@ -1,0 +1,87 @@
+.dashboard-wrapper {
+  padding: 30px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+.stat-card h4 {
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.stat-card p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #111;
+}
+
+.charts-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: 20px;
+}
+
+.chart-card {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  height: 300px;
+  padding: 1rem;
+  position: relative;
+}
+.chart-card h5 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+
+.chart-wrapper canvas {
+  position: absolute;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0;
+  left: 0;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}

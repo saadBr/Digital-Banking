@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthService} from './services/auth.service';
 import {NgChartsModule} from 'ng2-charts';
+import { Toast } from './toast/toast';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,FormsModule,ReactiveFormsModule,NgChartsModule],
+  imports: [RouterOutlet,FormsModule,ReactiveFormsModule,NgChartsModule,Toast],
   standalone: true,
   templateUrl: './app.html',
   styleUrl: './app.css'

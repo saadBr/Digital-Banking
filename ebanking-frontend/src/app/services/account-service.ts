@@ -64,5 +64,8 @@ export class AccountService {
       `${environment.backendHost}/accounts/${accountId}/operations/search`, { params: queryParams }
     );
   }
+  getLatestAccount(): Observable<AccountDetails> {
+    return this.http.get<AccountDetails>(`${environment.backendHost}/accounts/latest`);
+  }
 
 }

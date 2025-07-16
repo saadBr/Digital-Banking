@@ -12,7 +12,7 @@
     <div class="card chart-card">
         <h5 class="card-title text-center">Accounts Distribution</h5>
         <div class="chart-wrapper">
-            <canvas baseChart [data]="pieChartData" [type]="chartType"
+            <canvas baseChart #pieChart [data]="pieChartData" [type]="chartType"
             [options]="{ maintainAspectRatio: false, responsive: true }"></canvas>
         </div>
     </div>
@@ -20,7 +20,7 @@
     <div class="card chart-card">
         <h5 class="card-title text-center">Operations by Type</h5>
         <div class="chart-wrapper">
-            <canvas baseChart [data]="barChartData" [type]="barChartType"
+            <canvas baseChart #barChartOperations  [data]="barChartData" [type]="barChartType"
             [options]="{ maintainAspectRatio: false, responsive: true }"></canvas>
         </div>
     </div>
@@ -28,7 +28,7 @@
     <div class="card chart-card">
         <h5 class="card-title text-center">Active Customers</h5>
         <div class="chart-wrapper">
-            <canvas baseChart [data]="barChartMostActiveData" [type]="barChartType"></canvas>
+            <canvas baseChart #barChartCustomers [data]="barChartMostActiveData" [type]="barChartType"></canvas>
         </div>
     </div>
   </div>

@@ -70,10 +70,7 @@ canvas {
   height: 100% !important;
 }
 
-.chart-wrapper {
-  flex: 1;
-  position: relative;
-}
+
 
 .chart-wrapper canvas {
   position: absolute;
@@ -81,4 +78,10 @@ canvas {
   height: 100% !important;
   top: 0;
   left: 0;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+  width: 100%;
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Customer } from "../model/customer.model";
 import { CustomerService } from '../services/customer-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-customer-accounts',
@@ -22,11 +23,12 @@ export class CustomerAccounts implements OnInit {
     private route: ActivatedRoute,
     private customerService: CustomerService,
     private fb: FormBuilder,
-    private router:Router
+    private router: Router,
+    private toast: ToastService
   ) {}
-  
+
   navigateToNewAccount() {
-  this.router.navigate(['/admin/customer-accounts', this.customerId, 'new-account']);
+    this.router.navigate(['/admin/customer-accounts', this.customerId, 'new-account']);
   }
 
   ngOnInit(): void {
@@ -50,14 +52,20 @@ export class CustomerAccounts implements OnInit {
           email: cust.email
         });
       },
-      error: (err) => console.error('Error loading customer:', err)
+      error: (err) => {
+        console.error('Error loading customer:', err);
+        this.toast.showError(err.error || "Failed to load customer data");
+      }
     });
   }
 
   loadAccounts(): void {
     this.customerService.getCustomerAccounts(this.customerId).subscribe({
       next: (accs) => this.accounts = accs,
-      error: (err) => console.error('Error loading accounts:', err)
+      error: (err) => {
+        console.error('Error loading accounts:', err);
+        this.toast.showError(err.error || "Failed to load customer accounts");
+      }
     });
   }
 
@@ -69,14 +77,20 @@ export class CustomerAccounts implements OnInit {
     };
 
     this.customerService.updateCustomer(updatedCustomer).subscribe({
-      next: () => alert('Customer updated successfully.'),
-      error: (err) => console.error('Update failed:', err)
+      next: () => {
+        this.toast.showInfo("Customer updated successfully.");
+        this.loadCustomer(); // optional: refresh UI
+      },
+      error: (err) => {
+        console.error('Update failed:', err);
+        this.toast.showError(err.error || "Failed to update customer.");
+      }
     });
   }
-  goToAccount(accountId: string) {
-  this.router.navigate(['/admin/accounts'], {
-    state: { accountId }
-  });
 
-}
+  goToAccount(accountId: string) {
+    this.router.navigate(['/admin/accounts'], {
+      state: { accountId }
+    });
+  }
 }

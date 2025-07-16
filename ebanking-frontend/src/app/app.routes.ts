@@ -12,6 +12,9 @@ import {NotAutorized} from "./not-autorized/not-autorized";
 import { Dashboard } from './dashboard/dashboard';
 import { NewAccount } from './new-account/new-account';
 import { ChangePassword } from './change-password/change-password';
+import { NewUser } from './new-user/new-user';
+import { ManageUser } from './manage-user/manage-user';
+import { LogViewer } from './log-viewer/log-viewer';
 export const routes: Routes = [
   {path:"", redirectTo:"/login", pathMatch:"full"},
   {path: "login", component:Login},
@@ -23,7 +26,10 @@ export const routes: Routes = [
     {path: "notAuthorized", component:NotAutorized},
     {path: "dashboard", component:Dashboard},
     {path: "customer-accounts/:id/new-account",component: NewAccount},
-    {path: 'change-password', component: ChangePassword }
+    {path: 'change-password', component: ChangePassword },
+    {path: "create-user",component: NewUser,canActivate: [authorizationGuard],data: {role:["ADMIN"]}},
+    {path: "manage-users",component: ManageUser,canActivate: [authorizationGuard],data: {role:["ADMIN"]}},
+    {path: "logs",component: LogViewer,canActivate: [authorizationGuard],data: {role:["ADMIN"]}}
     ]},
 ];
 

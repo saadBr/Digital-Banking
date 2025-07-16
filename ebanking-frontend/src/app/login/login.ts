@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AuthService} from '../services/auth.service'
 import {Router} from '@angular/router'
+import { ToastService } from '../services/toast.service';
 @Component({
   selector: 'app-login',
   imports: [CommonModule, ReactiveFormsModule],
@@ -12,7 +13,7 @@ import {Router} from '@angular/router'
 })
 export class Login implements OnInit{
   formLogin!: FormGroup;
-  constructor(private fb : FormBuilder, private authService: AuthService, private router:Router) {
+  constructor(private fb : FormBuilder, private authService: AuthService, private router:Router, private toast: ToastService) {
   }
 
   ngOnInit(): void {
@@ -28,10 +29,10 @@ export class Login implements OnInit{
     this.authService.login(username,password).subscribe({
       next:data =>{
         this.authService.loadProfile(data);
-        this.router.navigateByUrl("/admin")
+        this.router.navigateByUrl("/admin/dashboard")
       },
       error:err=>{
-        console.log(err);
+        this.toast.showError(err.error || "Username or password incorrect")
       }
     })
   }

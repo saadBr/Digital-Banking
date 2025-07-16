@@ -31,9 +31,6 @@
 
           <!-- Async content -->
           <ng-template #errorTemplate>
-            <ng-container *ngIf="errorMessage; else loading">
-              <div class="alert alert-danger text-center">{{ errorMessage }}</div>
-            </ng-container>
             <ng-template #loading>
               <div class="text-center text-muted">Loading account data...</div>
             </ng-template>
@@ -147,7 +144,7 @@
               <select class="form-select" [(ngModel)]="selectedStatus" [ngModelOptions]="{ standalone: true }">
                 <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
               </select>
-              <button class="btn btn-outline-warning fw-semibold" type="button" (click)="updateStatus()">
+              <button class="btn btn-outline-success fw-semibold" type="button" (click)="updateStatus()">
                 <i class="bi bi-shield-check me-1"></i>Update
               </button>
             </div>

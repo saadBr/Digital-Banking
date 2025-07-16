@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../services/account-service';
 import { CustomerService } from '../services/customer-service';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-new-account',
@@ -22,7 +23,8 @@ export class NewAccount implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +39,7 @@ export class NewAccount implements OnInit {
 
     this.customerService.getCustomer(this.customerId).subscribe({
       next: cust => this.customerName = cust.name,
-      error: err => console.error(err)
+      error: err => this.toast.showError("Failed to load customer info")
     });
   }
 
@@ -57,10 +59,10 @@ export class NewAccount implements OnInit {
 
     this.accountService.createAccount(request).subscribe({
       next: () => {
-        alert('Account created successfully!');
+        this.toast.showSuccess('Account created successfully!');
         this.router.navigate(['/admin/customers', this.customerId]);
       },
-      error: err => console.error(err)
+      error: err => this.toast.showError(err?.error || 'Failed to create account')
     });
   }
 }

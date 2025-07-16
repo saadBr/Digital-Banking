@@ -128,7 +128,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     public void debit(String id, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException {
         BankAccount bankAccount = bankAccountRepository.findById(id)
                 .orElseThrow(()-> new BankAccountNotFoundException("Bank Account Not Found"));
-        if (bankAccount.getStatus() != AccountStatus.PENDING) {
+        if (bankAccount.getStatus() != AccountStatus.ACTIVE) {
             throw new IllegalStateException("Account is not active");
         }
         if(bankAccount.getBalance() < amount) {
@@ -327,6 +327,17 @@ public class BankAccountServiceImpl implements BankAccountService {
 
         return dto;
 
+    }
+
+    @Override
+    public BankAccountDTO getLatestAccount() {
+        BankAccount account = bankAccountRepository.findTopByOrderByDateCreatedDesc()
+                .orElseThrow(() -> new RuntimeException("No accounts found"));
+        if (account instanceof SavingAccount) {
+            return bankAccountMapper.fromSavingAccountToSavingAccountDTO((SavingAccount) account);
+        } else {
+            return bankAccountMapper.fromCurrentAccountToCurrentAccountDTO((CurrentAccount) account);
+        }
     }
 
 

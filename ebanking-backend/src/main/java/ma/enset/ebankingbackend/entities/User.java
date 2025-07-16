@@ -20,6 +20,7 @@ public class User {
     private String username;
     @Column(nullable = false)
     private String password;
+    @Column(unique = true)
     private String email;
     private Boolean enabled;
     @ElementCollection(fetch = FetchType.EAGER)

@@ -41,4 +41,6 @@ public interface BankAccountService {
     void cancelOperation(Long id) throws BankAccountNotFoundException;
 
     AccountHistoryDTO searchOperations(String accountId, LocalDate startDate, LocalDate endDate, Double minAmount, Double maxAmount, int page, int size) throws BankAccountNotFoundException;
+
+    BankAccountDTO getLatestAccount();
 }

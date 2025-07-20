@@ -71,25 +71,6 @@
           </tr>
         </tbody>
       </table>
-      <div class="modal fade show" tabindex="-1" aria-labelledby="resetPasswordLabel"
-        [style.display]="selectedUser ? 'block' : 'none'"
-        style="background-color: rgba(0, 0, 0, 0.5);" *ngIf="selectedUser">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-3 shadow">
-          <div class="modal-header bg-dark text-white">
-            <h5 class="modal-title" id="resetPasswordLabel">
-              <i class="bi bi-lock me-2"></i>Reset Password
-            </h5>
-            <button type="button" class="btn-close btn-close-white" (click)="selectedUser = null"></button>
-          </div>
-          <div class="modal-body">
-            <p>Reset password for <strong>{{ selectedUser.username }}</strong></p>
-            <input [(ngModel)]="resetPasswordValue"
-                  type="password"
-                  class="form-control"
-                  placeholder="Enter new password"
-            />
-      </div>
       <div class="modal fade show" tabindex="-1" [style.display]="userToDelete ? 'block' : 'none'" 
           style="background-color: rgba(0,0,0,0.5);" *ngIf="userToDelete">
         <div class="modal-dialog modal-dialog-centered">
@@ -111,6 +92,25 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="modal fade show" tabindex="-1" aria-labelledby="resetPasswordLabel"
+        [style.display]="selectedUser ? 'block' : 'none'"
+        style="background-color: rgba(0, 0, 0, 0.5);" *ngIf="selectedUser">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-3 shadow">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title" id="resetPasswordLabel">
+              <i class="bi bi-lock me-2"></i>Reset Password
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="selectedUser = null"></button>
+          </div>
+          <div class="modal-body">
+            <p>Reset password for <strong>{{ selectedUser.username }}</strong></p>
+            <input [(ngModel)]="resetPasswordValue"
+                  type="password"
+                  class="form-control"
+                  placeholder="Enter new password"
+            />
       </div>
 
       <div class="modal-footer">

@@ -25,11 +25,11 @@ export class UserService {
     return this.http.get<User[]>(`${environment.backendHost}/users`);
   }
 
-  deleteUser(userId: number) {
+  deleteUser(userId: string) {
     return this.http.delete(`${environment.backendHost}/users/${userId}`,{ responseType: 'text' as 'json' });
   }
 
-  updateUser(userId: number, data: any) {
+  updateUser(userId: string, data: any) {
     return this.http.put(`${environment.backendHost}/users/${userId}`, data);
   }
 

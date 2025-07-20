@@ -71,7 +71,7 @@ export class CustomerAccounts implements OnInit {
 
   handleUpdateUser(): void {
     const updatedCustomer: Customer = {
-      id: +this.customerId,
+      id: this.customerId,
       name: this.userForm.value.name,
       email: this.userForm.value.email
     };

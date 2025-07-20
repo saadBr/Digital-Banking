@@ -28,7 +28,7 @@ export class NewAccount implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.customerId = +this.route.snapshot.params['id'];
+    this.customerId = this.route.snapshot.params['id'];
 
     this.form = this.fb.group({
       initialBalance: [0],
@@ -60,7 +60,7 @@ export class NewAccount implements OnInit {
     this.accountService.createAccount(request).subscribe({
       next: () => {
         this.toast.showSuccess('Account created successfully!');
-        this.router.navigate(['/admin/customers', this.customerId]);
+        this.router.navigate(['/admin/accounts']);
       },
       error: err => this.toast.showError(err?.error || 'Failed to create account')
     });

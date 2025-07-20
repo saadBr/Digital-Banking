@@ -14,7 +14,7 @@ import { ToastService } from '../services/toast.service';
 })
 export class ManageUser {
   users: User[] = [];
-  editMode: { [id: number]: boolean } = {};
+  editMode: { [id: string]: boolean } = {};
   newPassword: string = '';
   selectedUser: User | null = null;
   resetPasswordValue: string = '';
@@ -33,7 +33,7 @@ export class ManageUser {
     });
   }
 
-  deleteUser(id: number) {
+  deleteUser(id: string) {
     if (!confirm('Are you sure you want to delete this user?')) return;
     this.userService.deleteUser(id).subscribe({
       next: () => {
@@ -47,7 +47,7 @@ export class ManageUser {
     });
   }
 
-  enableEdit(userId: number) {
+  enableEdit(userId: string) {
     this.editMode[userId] = true;
   }
 
@@ -100,4 +100,27 @@ export class ManageUser {
       }
     });
   }
+  userToDelete: User | null = null;
+
+  confirmDelete() {
+    if (!this.userToDelete) return;
+
+    this.userService.deleteUser(this.userToDelete.id).subscribe({
+      next: () => {
+        this.toast.showInfo("User deleted successfully");
+        this.users = this.users.filter(u => u.id !== this.userToDelete?.id);
+        this.userToDelete = null;
+      },
+      error: err => {
+        console.error(err);
+        this.toast.showError(err?.error || "Failed to delete user");
+        this.userToDelete = null;
+      }
+    });
+  }
+
+  cancelDelete() {
+    this.userToDelete = null;
+  }
+
 }

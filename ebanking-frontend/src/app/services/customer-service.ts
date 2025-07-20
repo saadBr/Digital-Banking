@@ -20,7 +20,7 @@ export class CustomerService {
   public saveCustomer(customer:Customer) : Observable<Customer>{
     return this.http.post<Customer>(environment.backendHost+"/customers",customer);
   }
-  public deleteCustomer(id:number) : Observable<Customer>{
+  public deleteCustomer(id:string) : Observable<Customer>{
     return this.http.delete<Customer>(environment.backendHost+"/customers/"+id);
   }
   public getCustomer(id: string): Observable<Customer> {

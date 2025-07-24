@@ -7,13 +7,10 @@ export interface ToastMessage {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
-
 export class ToastService {
-
-  constructor() { }
+  constructor() {}
 
   private toastSubject = new Subject<ToastMessage>();
   toast$ = this.toastSubject.asObservable();
@@ -29,5 +26,4 @@ export class ToastService {
   showInfo(message: string) {
     this.toastSubject.next({ type: 'info', message });
   }
-
 }

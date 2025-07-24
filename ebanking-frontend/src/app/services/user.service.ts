@@ -4,17 +4,19 @@ import { environment } from '../../environments/environment';
 import { User } from '../model/user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   changePassword(data: { oldPassword: string; newPassword: string }) {
-  return this.http.post(`${environment.backendHost}/users/change-password`, data, {
-    responseType: 'text'
-  });
-
+    return this.http.post(
+      `${environment.backendHost}/users/change-password`,
+      data,
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   createUser(user: any) {
@@ -26,7 +28,9 @@ export class UserService {
   }
 
   deleteUser(userId: string) {
-    return this.http.delete(`${environment.backendHost}/users/${userId}`,{ responseType: 'text' as 'json' });
+    return this.http.delete(`${environment.backendHost}/users/${userId}`, {
+      responseType: 'text' as 'json',
+    });
   }
 
   updateUser(userId: string, data: any) {
@@ -34,11 +38,13 @@ export class UserService {
   }
 
   resetPassword(username: string, newPassword: string) {
-  return this.http.post(`${environment.backendHost}/users/reset-password`, {
-    username,
-    newPassword
-  }, { responseType: 'text' as 'json' });
-}
-
-
+    return this.http.post(
+      `${environment.backendHost}/users/reset-password`,
+      {
+        username,
+        newPassword,
+      },
+      { responseType: 'text' as 'json' },
+    );
+  }
 }

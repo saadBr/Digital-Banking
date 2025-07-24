@@ -5,24 +5,26 @@ import { DashboardStats } from '../model/dashboard.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DashboardService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http:HttpClient) { }
-
-  getAccountsStats():Observable<DashboardStats> {
-    return this.http.get<DashboardStats>(environment.backendHost + '/dashboard');
+  getAccountsStats(): Observable<DashboardStats> {
+    return this.http.get<DashboardStats>(
+      environment.backendHost + '/dashboard',
+    );
   }
 
   getOperationsByType() {
-    return this.http.get(environment.backendHost + '/dashboard/operationsByType');
+    return this.http.get(
+      environment.backendHost + '/dashboard/operationsByType',
+    );
   }
 
   getMostActiveCustomers() {
     return this.http.get<{ [key: string]: number }>(
-      environment.backendHost + "/dashboard/most-active-customers"
+      environment.backendHost + '/dashboard/most-active-customers',
     );
   }
 }
-

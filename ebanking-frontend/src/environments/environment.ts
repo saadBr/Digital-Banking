@@ -1,3 +1,4 @@
 export const environment = {
-  backendHost : "http://localhost:8085"
-}
+  production: false,
+  backendHost: 'https://ebanking-backend-b193ea87f65e.herokuapp.com',
+};

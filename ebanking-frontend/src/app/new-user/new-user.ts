@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../services/toast.service';
@@ -9,28 +14,27 @@ import { ToastService } from '../services/toast.service';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './new-user.html',
-  styleUrl: './new-user.css'
+  styleUrl: './new-user.css',
 })
 export class NewUser {
-
   userForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private toast: ToastService
+    private toast: ToastService,
   ) {
     this.userForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      roles: this.fb.control('USER', Validators.required)
+      roles: this.fb.control('USER', Validators.required),
     });
   }
 
   createUser() {
     if (this.userForm.invalid) {
-      this.toast.showError("Please fill in all required fields correctly.");
+      this.toast.showError('Please fill in all required fields correctly.');
       return;
     }
 
@@ -43,7 +47,7 @@ export class NewUser {
       username: rawValue.username,
       password: rawValue.password,
       email: rawValue.email,
-      roles: roles
+      roles: roles,
     };
 
     this.userService.createUser(payload).subscribe({
@@ -54,7 +58,7 @@ export class NewUser {
       error: (err) => {
         console.error(err);
         this.toast.showError(err?.error || 'Failed to create user.');
-      }
+      },
     });
   }
 }

@@ -5,16 +5,31 @@
     <form [formGroup]="userForm" (ngSubmit)="createUser()">
       <div class="mb-3">
         <label class="form-label">👤 Username:</label>
-        <input type="text" class="form-control" formControlName="username" placeholder="e.g. saad" />
+        <input
+          type="text"
+          class="form-control"
+          formControlName="username"
+          placeholder="e.g. saad"
+        />
       </div>
 
       <div class="mb-3">
         <label class="form-label">🔒 Password:</label>
-        <input type="password" class="form-control" formControlName="password" placeholder="••••••••" />
+        <input
+          type="password"
+          class="form-control"
+          formControlName="password"
+          placeholder="••••••••"
+        />
       </div>
       <div class="mb-3">
         <label class="form-label">📧 Email:</label>
-        <input type="email" class="form-control" formControlName="email" placeholder="e.g. saad@bank.com" />
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="e.g. saad@bank.com"
+        />
       </div>
 
       <div class="mb-3">
@@ -25,8 +40,9 @@
         </select>
       </div>
 
-      <button class="btn btn-success w-100" [disabled]="userForm.invalid">✅ Create User</button>
-
+      <button class="btn btn-success w-100" [disabled]="userForm.invalid">
+        ✅ Create User
+      </button>
     </form>
   </div>
 </div>

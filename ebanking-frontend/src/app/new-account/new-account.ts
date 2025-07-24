@@ -9,13 +9,13 @@ import { ToastService } from '../services/toast.service';
 @Component({
   selector: 'app-new-account',
   templateUrl: './new-account.html',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   styleUrls: ['./new-account.css'],
 })
 export class NewAccount implements OnInit {
   customerId!: any;
   form!: FormGroup;
-  accountType = 'current'; // default
+  accountType = 'current';
   customerName: string = '';
 
   constructor(
@@ -24,7 +24,7 @@ export class NewAccount implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private customerService: CustomerService,
-    private toast: ToastService
+    private toast: ToastService,
   ) {}
 
   ngOnInit(): void {
@@ -34,12 +34,12 @@ export class NewAccount implements OnInit {
       initialBalance: [0],
       overdraft: [0],
       interestRate: [0],
-      type: ['current']
+      type: ['current'],
     });
 
     this.customerService.getCustomer(this.customerId).subscribe({
-      next: cust => this.customerName = cust.name,
-      error: err => this.toast.showError("Failed to load customer info")
+      next: (cust) => (this.customerName = cust.name),
+      error: (err) => this.toast.showError('Failed to load customer info'),
     });
   }
 
@@ -48,7 +48,7 @@ export class NewAccount implements OnInit {
     const request: any = {
       customerId: this.customerId,
       type: formValue.type,
-      initialBalance: formValue.initialBalance
+      initialBalance: formValue.initialBalance,
     };
 
     if (formValue.type === 'current') {
@@ -62,7 +62,8 @@ export class NewAccount implements OnInit {
         this.toast.showSuccess('Account created successfully!');
         this.router.navigate(['/admin/accounts']);
       },
-      error: err => this.toast.showError(err?.error || 'Failed to create account')
+      error: (err) =>
+        this.toast.showError(err?.error || 'Failed to create account'),
     });
   }
 }

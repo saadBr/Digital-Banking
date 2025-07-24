@@ -1,35 +1,51 @@
 <div class="dashboard-wrapper">
   <h1 class="title text-center">📊 Dashboard</h1>
 
-  <div class="stats-cards">
-    <div class="stat-card" *ngFor="let stat of statCards">
-      <h4>{{stat.label}}</h4>
-      <p>{{stat.value}}</p>
+  <div *ngIf="!allChartsReady" class="loading-container">
+    <div class="bank-spinner">
+      <div class="coin"></div>
+      <p class="loading-text">💳 Loading dashboard...</p>
     </div>
   </div>
 
-  <div class="charts-section">
-    <div class="card chart-card">
-        <h5 class="card-title text-center">Accounts Distribution</h5>
-        <div class="chart-wrapper">
-            <canvas baseChart #pieChart [data]="pieChartData" [type]="chartType"
-            [options]="{ maintainAspectRatio: false, responsive: true }"></canvas>
-        </div>
+  <div *ngIf="allChartsReady">
+    <div class="stats-cards">
+      <div class="stat-card" *ngFor="let stat of statCards">
+        <h4>{{ stat.label }}</h4>
+        <p>{{ stat.value }}</p>
+      </div>
     </div>
 
-    <div class="card chart-card">
-        <h5 class="card-title text-center">Operations by Type</h5>
-        <div class="chart-wrapper">
-            <canvas baseChart #barChartOperations  [data]="barChartData" [type]="barChartType"
-            [options]="{ maintainAspectRatio: false, responsive: true }"></canvas>
-        </div>
-    </div>
+    <div class="charts-section">
+      <div class="card chart-card">
+        <apx-chart
+          [series]="pieChartOptions.series"
+          [chart]="pieChartOptions.chart"
+          [labels]="pieChartOptions.labels"
+          [title]="pieChartOptions.title"
+        >
+        </apx-chart>
+      </div>
 
-    <div class="card chart-card">
-        <h5 class="card-title text-center">Active Customers</h5>
-        <div class="chart-wrapper">
-            <canvas baseChart #barChartCustomers [data]="barChartMostActiveData" [type]="barChartType"></canvas>
-        </div>
+      <div class="card chart-card">
+        <apx-chart
+          [series]="barChartOperationsOptions.series"
+          [chart]="barChartOperationsOptions.chart"
+          [xaxis]="barChartOperationsOptions.xaxis"
+          [title]="barChartOperationsOptions.title"
+        >
+        </apx-chart>
+      </div>
+
+      <div class="card chart-card">
+        <apx-chart
+          [series]="barChartCustomersOptions.series"
+          [chart]="barChartCustomersOptions.chart"
+          [xaxis]="barChartCustomersOptions.xaxis"
+          [title]="barChartCustomersOptions.title"
+        >
+        </apx-chart>
+      </div>
     </div>
   </div>
 </div>

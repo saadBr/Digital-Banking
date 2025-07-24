@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   selector: 'app-log-viewer',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './log-viewer.html'
+  templateUrl: './log-viewer.html',
 })
 export class LogViewer implements OnInit {
   logs: any[] = [];
@@ -35,22 +35,24 @@ export class LogViewer implements OnInit {
       params = params.set('action', this.actionFilter);
     }
 
-    this.http.get<any[]>(`${environment.backendHost}/logs/search`, { params }).subscribe({
-      next: data => {
-        this.logs = data;
-        this.loading = false;
-      },
-      error: err => {
-        this.errorMessage = 'Failed to load logs.';
-        this.logs = [];
-        this.loading = false;
-        console.error(err);
-      }
-    });
+    this.http
+      .get<any[]>(`${environment.backendHost}/logs/search`, { params })
+      .subscribe({
+        next: (data) => {
+          this.logs = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          this.errorMessage = 'Failed to load logs.';
+          this.logs = [];
+          this.loading = false;
+          console.error(err);
+        },
+      });
   }
 
   fetchFilteredLogs() {
-    this.fetchLogs(); 
+    this.fetchLogs();
   }
 
   resetFilters() {

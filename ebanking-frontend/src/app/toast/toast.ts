@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-toast',
   imports: [CommonModule],
   templateUrl: './toast.html',
-  styleUrl: './toast.css'
+  styleUrl: './toast.css',
 })
 export class Toast implements OnInit {
   toasts: ToastMessage[] = [];
@@ -18,7 +18,7 @@ export class Toast implements OnInit {
       this.toasts.push(msg);
       setTimeout(() => {
         this.toasts.shift();
-      }, 3000); 
+      }, 3000);
     });
   }
 }

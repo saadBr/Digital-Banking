@@ -8,9 +8,8 @@ describe('LogViewer', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LogViewer]
-    })
-    .compileComponents();
+      imports: [LogViewer],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LogViewer);
     component = fixture.componentInstance;

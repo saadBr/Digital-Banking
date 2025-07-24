@@ -1,18 +1,23 @@
 export interface AccountDetails {
-  accountId:   string;
-  balance:     number;
-  currentPage: number;
-  pageSize:    number;
-  totalPages:  number;
-  operations:  Operation[];
+  id: string;
+  balance: number;
+  dateCreated: string;
+  customerId: string;
   status: string;
+  type: string;
+  interestRate?: number;
+  overdraftLimit?: number;
+  operations: Operation[];
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
 }
 
 export interface Operation {
-  id:            number;
+  id: number;
   operationDate: Date;
-  amount:        number;
-  type:          string;
-  description:   string;
-  cancelled?:    boolean;
+  amount: number;
+  type: string;
+  description: string;
+  cancelled?: boolean;
 }

@@ -8,9 +8,8 @@ describe('NotAutorized', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NotAutorized]
-    })
-    .compileComponents();
+      imports: [NotAutorized],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NotAutorized);
     component = fixture.componentInstance;

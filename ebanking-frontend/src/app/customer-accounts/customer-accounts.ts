@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Customer } from "../model/customer.model";
+import { Customer } from '../model/customer.model';
 import { CustomerService } from '../services/customer-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from '../services/toast.service';
@@ -11,7 +11,7 @@ import { ToastService } from '../services/toast.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './customer-accounts.html',
-  styleUrl: './customer-accounts.css'
+  styleUrl: './customer-accounts.css',
 })
 export class CustomerAccounts implements OnInit {
   customerId!: string;
@@ -24,11 +24,15 @@ export class CustomerAccounts implements OnInit {
     private customerService: CustomerService,
     private fb: FormBuilder,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
   ) {}
 
   navigateToNewAccount() {
-    this.router.navigate(['/admin/customer-accounts', this.customerId, 'new-account']);
+    this.router.navigate([
+      '/admin/customer-accounts',
+      this.customerId,
+      'new-account',
+    ]);
   }
 
   ngOnInit(): void {
@@ -36,7 +40,7 @@ export class CustomerAccounts implements OnInit {
 
     this.userForm = this.fb.group({
       name: [''],
-      email: ['']
+      email: [''],
     });
 
     this.loadCustomer();
@@ -49,23 +53,23 @@ export class CustomerAccounts implements OnInit {
         this.customer = cust;
         this.userForm.patchValue({
           name: cust.name,
-          email: cust.email
+          email: cust.email,
         });
       },
       error: (err) => {
         console.error('Error loading customer:', err);
-        this.toast.showError(err.error || "Failed to load customer data");
-      }
+        this.toast.showError(err.error || 'Failed to load customer data');
+      },
     });
   }
 
   loadAccounts(): void {
     this.customerService.getCustomerAccounts(this.customerId).subscribe({
-      next: (accs) => this.accounts = accs,
+      next: (accs) => (this.accounts = accs),
       error: (err) => {
         console.error('Error loading accounts:', err);
-        this.toast.showError(err.error || "Failed to load customer accounts");
-      }
+        this.toast.showError(err.error || 'Failed to load customer accounts');
+      },
     });
   }
 
@@ -73,24 +77,24 @@ export class CustomerAccounts implements OnInit {
     const updatedCustomer: Customer = {
       id: this.customerId,
       name: this.userForm.value.name,
-      email: this.userForm.value.email
+      email: this.userForm.value.email,
     };
 
     this.customerService.updateCustomer(updatedCustomer).subscribe({
       next: () => {
-        this.toast.showInfo("Customer updated successfully.");
-        this.loadCustomer(); // optional: refresh UI
+        this.toast.showInfo('Customer updated successfully.');
+        this.loadCustomer();
       },
       error: (err) => {
         console.error('Update failed:', err);
-        this.toast.showError(err.error || "Failed to update customer.");
-      }
+        this.toast.showError(err.error || 'Failed to update customer.');
+      },
     });
   }
 
-  goToAccount(accountId: string) {
+  goToAccount(id: string) {
     this.router.navigate(['/admin/accounts'], {
-      state: { accountId }
+      state: { id },
     });
   }
 }

@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   imports: [],
   standalone: true,
   templateUrl: './not-autorized.html',
-  styleUrl: './not-autorized.css'
+  styleUrl: './not-autorized.css',
 })
-export class NotAutorized {
-
-}
+export class NotAutorized {}

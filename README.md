@@ -3,7 +3,7 @@
 This is a **full-stack digital banking application** built with **Spring Boot (Java)** and **Angular**. It simulates a real-world online banking system with features like customer and account management, secure authentication, financial operations, user access control, and insightful dashboards.
 
 > 🧠 **For educational purposes only. Please do not clone or reuse without permission.**  
-> 🔐 **Live demo** available at: [saadbr.me/DigitalBanking](https://saadbr.me/Digital-Banking)  
+> 🔐 **Live demo** available at: [saadbr.me/Digita-lBanking](https://saadbr.me/Digital-Banking)  
 > 👤 Test Credentials: `admin / admin123@`
 
 ---

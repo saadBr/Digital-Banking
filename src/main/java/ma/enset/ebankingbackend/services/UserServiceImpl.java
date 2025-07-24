@@ -8,7 +8,6 @@ import ma.enset.ebankingbackend.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -23,7 +22,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Username already exists");
         }
         Set<Role> roles = request.getRoles();
-        if(roles.contains(Role.ADMIN)) {
+        if (roles.contains(Role.ADMIN)) {
             roles.add(Role.USER);
         }
         User user = User.builder()

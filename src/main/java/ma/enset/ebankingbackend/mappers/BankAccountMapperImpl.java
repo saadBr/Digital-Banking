@@ -35,12 +35,6 @@ public class BankAccountMapperImpl {
         return dto;
     }
 
-    public CurrentAccount fromCurrentAccountDTOToCurrentAccount(CurrentAccountDTO dto) {
-        CurrentAccount entity = new CurrentAccount();
-        BeanUtils.copyProperties(dto, entity);
-        return entity;
-    }
-
 
     public SavingAccountDTO fromSavingAccountToSavingAccountDTO(SavingAccount entity) {
         SavingAccountDTO dto = new SavingAccountDTO();
@@ -49,11 +43,6 @@ public class BankAccountMapperImpl {
         return dto;
     }
 
-    public SavingAccount fromSavingAccountDTOToSavingAccount(SavingAccountDTO dto) {
-        SavingAccount entity = new SavingAccount();
-        BeanUtils.copyProperties(dto, entity);
-        return entity;
-    }
 
     public AccountOperationDTO fromAccountToAccountOperationDTO(AccountOperation entity) {
         AccountOperationDTO dto = new AccountOperationDTO();

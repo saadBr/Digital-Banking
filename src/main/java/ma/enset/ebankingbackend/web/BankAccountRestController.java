@@ -7,8 +7,8 @@ import ma.enset.ebankingbackend.enums.AccountStatus;
 import ma.enset.ebankingbackend.exceptions.BalanceNotSufficientException;
 import ma.enset.ebankingbackend.exceptions.BankAccountNotFoundException;
 import ma.enset.ebankingbackend.exceptions.CustomerNotFoundException;
-import ma.enset.ebankingbackend.services.BankAccountService;
 import ma.enset.ebankingbackend.services.ActionLogServiceImpl;
+import ma.enset.ebankingbackend.services.BankAccountService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -98,7 +98,7 @@ public class BankAccountRestController {
     }
 
     @PatchMapping("/accounts/{id}/status")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateStatus(
             @PathVariable String id,
             @RequestBody Map<String, String> payload,
@@ -117,6 +117,18 @@ public class BankAccountRestController {
         return ResponseEntity.ok("Status updated to " + newStatus);
     }
 
+    @PutMapping("/accounts/{id}/interest-rate")
+    @PreAuthorize("hasRole('USER')")
+    public void updateInterestRate(@PathVariable String id, @RequestBody double newRate) throws BankAccountNotFoundException {
+        bankAccountService.updateInterestRate(id, newRate);
+    }
+
+    @PutMapping("/accounts/{id}/overdraft")
+    @PreAuthorize("hasRole('USER')")
+    public void updateOverdraft(@PathVariable String id, @RequestBody double newLimit) throws BankAccountNotFoundException {
+        bankAccountService.updateOverdraftLimit(id, newLimit);
+    }
+
     @PatchMapping("/operations/{id}/cancel")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> cancelOperation(@PathVariable String id, Principal principal) throws BankAccountNotFoundException {
@@ -126,7 +138,7 @@ public class BankAccountRestController {
     }
 
     @GetMapping("/accounts/{accountId}/operations/search")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public AccountHistoryDTO searchOperations(
             @PathVariable String accountId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,

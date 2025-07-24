@@ -73,7 +73,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteUser(@PathVariable String  id, Principal principal) {
+    public ResponseEntity<?> deleteUser(@PathVariable String id, Principal principal) {
         return userRepository.findById(id).map(user -> {
             userRepository.deleteById(id);
             actionLogServiceImpl.log(principal.getName(), "DELETE_USER", "Deleted user: " + user.getUsername());

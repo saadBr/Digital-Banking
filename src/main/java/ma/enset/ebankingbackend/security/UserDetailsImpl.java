@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 @Getter
 public class UserDetailsImpl implements UserDetails {
     private final User user;
+
     public UserDetailsImpl(User user) {
         this.user = user;
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream()
@@ -51,7 +53,6 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return user.getEnabled();
     }
-
 
 
 }

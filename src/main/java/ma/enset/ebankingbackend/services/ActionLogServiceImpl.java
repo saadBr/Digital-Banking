@@ -25,7 +25,7 @@ public class ActionLogServiceImpl implements ActionLogService {
         log.setTimestamp(new Date());
         log.setAction(action);
         log.setDescription(description);
-        log.setPerformedByUserId(user.getId()); // store only userId
+        log.setPerformedByUserId(user.getId());
         actionLogRepository.save(log);
     }
 
@@ -35,7 +35,7 @@ public class ActionLogServiceImpl implements ActionLogService {
         if (username != null) {
             userId = userRepository.findByUsername(username)
                     .map(User::getId).orElse(null);
-            if (userId == null) return List.of(); // no logs if user not found
+            if (userId == null) return List.of();
         }
         if (userId != null && action != null) {
             return actionLogRepository.findByPerformedByUserIdAndActionOrderByTimestampDesc(userId, action);

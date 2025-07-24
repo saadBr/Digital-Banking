@@ -9,10 +9,11 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
-import java.util.List;
+
 @Document(collection = "bankAccounts")
 @TypeAlias("bankAccount")
-@Data @NoArgsConstructor
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public abstract class BankAccount {
     @Id

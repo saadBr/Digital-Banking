@@ -1,9 +1,7 @@
 package ma.enset.ebankingbackend.repositories;
 
 import ma.enset.ebankingbackend.entities.Customer;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

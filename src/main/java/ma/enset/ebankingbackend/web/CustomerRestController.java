@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import ma.enset.ebankingbackend.dtos.BankAccountDTO;
 import ma.enset.ebankingbackend.dtos.CustomerDTO;
 import ma.enset.ebankingbackend.exceptions.CustomerNotFoundException;
-import ma.enset.ebankingbackend.services.BankAccountService;
 import ma.enset.ebankingbackend.services.ActionLogServiceImpl;
+import ma.enset.ebankingbackend.services.BankAccountService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +39,7 @@ public class CustomerRestController {
     }
 
     @PostMapping("/customers")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public CustomerDTO createCustomer(@RequestBody CustomerDTO customerDTO, Principal principal) {
         CustomerDTO saved = bankAccountService.saveCustomer(customerDTO);
         actionLogServiceImpl.log(principal.getName(),
@@ -49,7 +49,7 @@ public class CustomerRestController {
     }
 
     @PutMapping("/customers/{customerID}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public CustomerDTO updateCustomer(@PathVariable String customerID, @RequestBody CustomerDTO customerDTO, Principal principal) throws CustomerNotFoundException {
         customerDTO.setId(customerID);
         CustomerDTO updated = bankAccountService.updateCustomer(customerDTO);

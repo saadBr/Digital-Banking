@@ -1,0 +1,58 @@
+<div class="container mt-4">
+  <div class="card shadow col-md-8 offset-md-2">
+    <div class="card-header bg-primary text-white fw-bold">
+      <i class="bi bi-person-lines-fill me-2"></i>User Details
+    </div>
+    <div class="card-body">
+      <form [formGroup]="userForm" (ngSubmit)="handleUpdateUser()">
+        <div class="mb-3">
+          <label class="form-label">Name:</label>
+          <input formControlName="name" class="form-control" type="text" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email:</label>
+          <input formControlName="email" class="form-control" type="email" />
+        </div>
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="userForm.invalid"
+        >
+          <i class="bi bi-arrow-repeat me-1"></i>Update
+        </button>
+      </form>
+      <hr class="my-4" />
+      <div>
+        <h5 class="mt-4">
+          <i class="bi bi-credit-card me-2"></i>Associated Accounts
+        </h5>
+        <div class="list-group mt-3">
+          <a
+            *ngFor="let acc of accounts"
+            (click)="goToAccount(acc.id)"
+            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+            title="View account details"
+          >
+            <div>
+              <i class="bi bi-hash text-muted"></i> {{ acc.id}}
+              <span class="badge bg-secondary ms-2">{{ acc.type }}</span>
+            </div>
+            <div>
+              <strong
+                >{{ acc.balance | number:'1.0-2' }} {{ acc.currency }}</strong
+              >
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end mt-3">
+        <button
+          class="btn btn-outline-primary btn-sm"
+          (click)="navigateToNewAccount()"
+        >
+          <i class="bi bi-plus-circle me-1"></i> Add New Account
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

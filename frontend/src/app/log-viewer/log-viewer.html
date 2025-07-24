@@ -1,0 +1,75 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Action Logs</h2>
+
+  <form class="row g-3 mb-4" (ngSubmit)="fetchFilteredLogs()">
+    <div class="col-md-4">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Filter by Username"
+        [(ngModel)]="usernameFilter"
+        name="username"
+      />
+    </div>
+    <div class="col-md-4">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Filter by Action"
+        [(ngModel)]="actionFilter"
+        name="action"
+      />
+    </div>
+    <div class="col-md-4 d-flex gap-2">
+      <button type="submit" class="btn btn-primary">Search</button>
+      <button type="button" class="btn btn-secondary" (click)="resetFilters()">
+        Reset
+      </button>
+    </div>
+  </form>
+
+  <ng-container *ngIf="errorMessage; else logTable">
+    <div class="alert alert-danger text-center">{{ errorMessage }}</div>
+  </ng-container>
+
+  <ng-template #logTable>
+    <div *ngIf="loading" class="text-center py-4">
+      <div
+        class="spinner-border text-primary"
+        role="status"
+        style="width: 3rem; height: 3rem"
+      >
+        <span class="visually-hidden">Loading logs...</span>
+      </div>
+      <div class="mt-2">📄 Fetching logs ...</div>
+    </div>
+    <div class="table-responsive">
+      <table
+        class="table table-striped table-bordered"
+        *ngIf="!loading && logs.length > 0"
+      >
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Timestamp</th>
+            <th>Action</th>
+            <th>Description</th>
+            <th>Performed By</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of logs">
+            <td>{{ log.id }}</td>
+            <td>{{ log.timestamp | date:'short' }}</td>
+            <td>{{ log.action }}</td>
+            <td>{{ log.description }}</td>
+            <td>{{ log.performedByUserId }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="!loading && logs.length === 0" class="text-center text-muted">
+      No logs found.
+    </div>
+  </ng-template>
+</div>

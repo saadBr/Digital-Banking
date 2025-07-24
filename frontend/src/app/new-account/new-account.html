@@ -1,0 +1,50 @@
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <i class="bi bi-piggy-bank me-2"></i>Create New Account for {{
+      customerName }}
+    </div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="handleCreateAccount()">
+        <div class="mb-3">
+          <label class="form-label">Account Type</label>
+          <select class="form-select" formControlName="type">
+            <option value="current">Current</option>
+            <option value="saving">Saving</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Initial Balance</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="initialBalance"
+          />
+        </div>
+
+        <div class="mb-3" *ngIf="form.value.type === 'current'">
+          <label class="form-label">Overdraft</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="overdraft"
+          />
+        </div>
+
+        <div class="mb-3" *ngIf="form.value.type === 'saving'">
+          <label class="form-label">Interest Rate</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="interestRate"
+          />
+        </div>
+
+        <button class="btn btn-success">
+          <i class="bi bi-check-circle me-1"></i>Create Account
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

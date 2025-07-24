@@ -1,0 +1,45 @@
+<div class="d-flex align-items-center justify-content-center vh-100 bg-light">
+  <div class="card shadow-lg rounded-4 border-0 p-4" style="width: 400px">
+    <div class="text-center mb-4">
+      <img
+        src="assets/images/sbr-bank-logo.png"
+        alt="SBR Bank Logo"
+        style="max-height: 10rem"
+      />
+      <h4 class="mt-2 fw-bold">Welcome Back</h4>
+      <p class="text-muted mb-0">Please login to your account</p>
+    </div>
+
+    <form [formGroup]="formLogin" (ngSubmit)="handleLogin()">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Username</label>
+        <input
+          type="text"
+          class="form-control rounded-pill"
+          formControlName="username"
+          placeholder="Enter your username"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Password</label>
+        <input
+          type="password"
+          class="form-control rounded-pill"
+          formControlName="password"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <div class="d-grid">
+        <button class="btn btn-primary rounded-pill fw-bold">
+          <i class="bi bi-box-arrow-in-right me-2"></i> Login
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-3">
+      <small class="text-muted">© E-Bank 2025</small>
+    </div>
+  </div>
+</div>

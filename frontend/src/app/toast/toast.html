@@ -1,0 +1,22 @@
+<div
+  class="toast-container position-fixed top-0 end-0 p-3"
+  style="z-index: 1050"
+>
+  <div
+    *ngFor="let toast of toasts"
+    class="toast show text-white border-0 mb-2"
+    [ngClass]="{
+         'bg-success': toast.type === 'success',
+         'bg-danger': toast.type === 'error',
+         'bg-info': toast.type === 'info'
+       }"
+  >
+    <div class="toast-body d-flex justify-content-between align-items-center">
+      <span>{{ toast.message }}</span>
+      <button
+        class="btn-close btn-close-white ms-2"
+        (click)="toasts.shift()"
+      ></button>
+    </div>
+  </div>
+</div>

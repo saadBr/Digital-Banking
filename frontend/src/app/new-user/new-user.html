@@ -1,0 +1,48 @@
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h3 class="mb-4 text-center">➕ Create New User</h3>
+
+    <form [formGroup]="userForm" (ngSubmit)="createUser()">
+      <div class="mb-3">
+        <label class="form-label">👤 Username:</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="username"
+          placeholder="e.g. saad"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">🔒 Password:</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="password"
+          placeholder="••••••••"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">📧 Email:</label>
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="e.g. saad@bank.com"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">👥 Role:</label>
+        <select class="form-select" formControlName="roles">
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </div>
+
+      <button class="btn btn-success w-100" [disabled]="userForm.invalid">
+        ✅ Create User
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,193 @@
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h3 class="mb-4 text-center text-primary">
+      <i class="bi bi-people-fill me-2"></i>Manage Users
+    </h3>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>👤 Username</th>
+            <th>📧 Email</th>
+            <th>🎓 Roles</th>
+            <th>🔒 Status</th>
+            <th>⚙️ Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.username }}</td>
+
+            <td>
+              <input
+                *ngIf="editMode[user.id]"
+                [(ngModel)]="user.email"
+                class="form-control"
+              />
+              <span *ngIf="!editMode[user.id]">{{ user.email }}</span>
+            </td>
+
+            <td>
+              <div
+                *ngIf="editMode[user.id]"
+                class="d-flex justify-content-center gap-3"
+              >
+                <div
+                  *ngFor="let role of ['USER', 'ADMIN']"
+                  class="form-check form-check-inline"
+                >
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [checked]="user.roles.includes(role)"
+                    (change)="toggleRole(user, role)"
+                  />
+                  <label class="form-check-label">{{ role }}</label>
+                </div>
+              </div>
+              <span *ngIf="!editMode[user.id]">
+                <span
+                  *ngFor="let role of user.roles"
+                  class="badge bg-info text-dark me-1"
+                  >{{ role }}</span
+                >
+              </span>
+            </td>
+
+            <td>
+              <select
+                class="form-select"
+                *ngIf="editMode[user.id]"
+                [(ngModel)]="user.enabled"
+              >
+                <option [value]="true">Enabled</option>
+                <option [value]="false">Disabled</option>
+              </select>
+              <span
+                *ngIf="!editMode[user.id]"
+                [ngClass]="user.enabled ? 'badge bg-success' : 'badge bg-secondary'"
+              >
+                {{ user.enabled ? 'Enabled' : 'Disabled' }}
+              </span>
+            </td>
+
+            <td>
+              <div class="d-flex justify-content-center gap-2">
+                <button
+                  *ngIf="!editMode[user.id]"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="enableEdit(user.id)"
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button
+                  *ngIf="editMode[user.id]"
+                  class="btn btn-sm btn-outline-success"
+                  (click)="saveUser(user)"
+                >
+                  <i class="bi bi-check-circle"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  *ngIf="canDelete(user)"
+                  (click)="userToDelete = user"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-warning"
+                  *ngIf="canResetPassword(user)"
+                  (click)="openResetPasswordModal(user)"
+                >
+                  <i class="bi bi-key"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div
+        class="modal fade show"
+        tabindex="-1"
+        [style.display]="userToDelete ? 'block' : 'none'"
+        style="background-color: rgba(0, 0, 0, 0.5)"
+        *ngIf="userToDelete"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content rounded-3 shadow">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm
+                Deletion
+              </h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                (click)="cancelDelete()"
+              ></button>
+            </div>
+            <div class="modal-body text-center">
+              Are you sure you want to delete
+              <strong>{{ userToDelete.username }}</strong>?
+            </div>
+            <div class="modal-footer justify-content-center">
+              <button class="btn btn-secondary" (click)="cancelDelete()">
+                Cancel
+              </button>
+              <button class="btn btn-danger" (click)="confirmDelete()">
+                <i class="bi bi-trash me-1"></i>Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="modal fade show"
+        tabindex="-1"
+        aria-labelledby="resetPasswordLabel"
+        [style.display]="selectedUser ? 'block' : 'none'"
+        style="background-color: rgba(0, 0, 0, 0.5)"
+        *ngIf="selectedUser"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content rounded-3 shadow">
+            <div class="modal-header bg-dark text-white">
+              <h5 class="modal-title" id="resetPasswordLabel">
+                <i class="bi bi-lock me-2"></i>Reset Password
+              </h5>
+              <button
+                type="button"
+                class="btn-close btn-close-white"
+                (click)="selectedUser = null"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <p>
+                Reset password for <strong>{{ selectedUser.username }}</strong>
+              </p>
+              <input
+                [(ngModel)]="resetPasswordValue"
+                type="password"
+                class="form-control"
+                placeholder="Enter new password"
+              />
+            </div>
+
+            <div class="modal-footer">
+              <button
+                class="btn btn-outline-secondary"
+                (click)="selectedUser = null"
+              >
+                Cancel
+              </button>
+              <button class="btn btn-success" (click)="submitPasswordReset()">
+                <i class="bi bi-check-circle me-1"></i>Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

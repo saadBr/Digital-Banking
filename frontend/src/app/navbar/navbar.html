@@ -1,0 +1,133 @@
+<nav
+  class="navbar navbar-expand-lg navbar-dark"
+  style="
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  "
+>
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-success" href="#">
+      <i class="bi bi-bank2 me-2"></i>E-Banking
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle text-light fw-semibold"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-people me-1"></i>Customers
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/customers">
+                <i class="bi bi-search me-1"></i>Search Customers
+              </a>
+            </li>
+            <li *ngIf="authService.roles.includes('ADMIN')">
+              <a class="dropdown-item" routerLink="/admin/new-customer">
+                <i class="bi bi-person-plus me-1"></i>New Customer
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link text-light fw-semibold"
+            routerLink="/admin/accounts"
+          >
+            <i class="bi bi-wallet2 me-1"></i>Accounts
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link text-light fw-semibold"
+            routerLink="/admin/dashboard"
+          >
+            <i class="bi bi-bar-chart-line me-1"></i>Dashboard
+          </a>
+        </li>
+        <li
+          class="nav-item dropdown"
+          *ngIf="authService.roles.includes('ADMIN')"
+        >
+          <a
+            class="nav-link dropdown-toggle text-light fw-semibold"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-person-gear me-1"></i>Users
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/create-user">
+                <i class="bi bi-person-plus-fill me-1"></i>Create User
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/admin/manage-users">
+                <i class="bi bi-tools me-1"></i>Manage Users
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul
+        class="navbar-nav d-flex align-items-center"
+        *ngIf="authService.isAuthenticated"
+      >
+        <li class="nav-item" *ngIf="authService.roles.includes('ADMIN')">
+          <a
+            class="nav-link d-flex align-items-center gap-1"
+            routerLink="/admin/logs"
+          >
+            <i class="bi bi-journal-text"></i>
+            <span>Logs</span>
+          </a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle text-info small fw-semibold"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+          >
+            <i class="bi bi-person-circle me-1"></i>Welcome,
+            <strong>{{ authService.username }}</strong>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" routerLink="/admin/change-password">
+                <i class="bi bi-key me-1"></i>Change Password
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="handleLogout()">
+                <i class="bi bi-box-arrow-right me-1"></i>Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
